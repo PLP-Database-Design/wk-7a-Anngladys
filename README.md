@@ -59,6 +59,35 @@ SELECT OrderID, CustomerName, 'Phone' AS Product
 FROM ProductDetail
 WHERE Products LIKE '%Phone%';
 
+ANSWER
+SELECT OrderID, CustomerName, 'Laptop' AS Product
+FROM ProductDetail
+WHERE Products LIKE '%Laptop%'
+
+UNION ALL
+
+SELECT OrderID, CustomerName, 'Mouse' AS Product
+FROM ProductDetail
+WHERE Products LIKE '%Mouse%'
+
+UNION ALL
+
+SELECT OrderID, CustomerName, 'Tablet' AS Product
+FROM ProductDetail
+WHERE Products LIKE '%Tablet%'
+
+UNION ALL
+
+SELECT OrderID, CustomerName, 'Keyboard' AS Product
+FROM ProductDetail
+WHERE Products LIKE '%Keyboard%'
+
+UNION ALL
+
+SELECT OrderID, CustomerName, 'Phone' AS Product
+FROM ProductDetail
+WHERE Products LIKE '%Phone%';
+
 --- 
 
 ### Question 2 Achieving 2NF (Second Normal Form) 🧩
@@ -88,8 +117,31 @@ INSERT INTO Customers (OrderID, CustomerName)
 SELECT DISTINCT OrderID, CustomerName
 FROM OrderDetails;
 
+ANSWER
+CREATE TABLE Customers (
+    OrderID INT PRIMARY KEY,
+    CustomerName VARCHAR(100)
+);
+
+INSERT INTO Customers (OrderID, CustomerName)
+SELECT DISTINCT OrderID, CustomerName
+FROM OrderDetails;
+
+
 STEP 2: Create a NewOrderDetails table (OrderID + Product → Quantity)
 
+CREATE TABLE NewOrderDetails (
+    OrderID INT,
+    Product VARCHAR(100),
+    Quantity INT,
+    PRIMARY KEY (OrderID, Product)
+);
+
+INSERT INTO NewOrderDetails (OrderID, Product, Quantity)
+SELECT OrderID, Product, Quantity
+FROM OrderDetails;
+
+ANSWER
 CREATE TABLE NewOrderDetails (
     OrderID INT,
     Product VARCHAR(100),

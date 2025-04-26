@@ -39,6 +39,25 @@ Task:
 
 - In the table above, the **Products column** contains multiple values, which violates **1NF**.
 - **Write an SQL query** to transform this table into **1NF**, ensuring that each row represents a single product for an order
+SELECT OrderID, CustomerName, 'Laptop' AS Product
+FROM ProductDetail
+WHERE Products LIKE '%Laptop%'
+UNION ALL
+SELECT OrderID, CustomerName, 'Mouse' AS Product
+FROM ProductDetail
+WHERE Products LIKE '%Mouse%'
+UNION ALL
+SELECT OrderID, CustomerName, 'Tablet' AS Product
+FROM ProductDetail
+WHERE Products LIKE '%Tablet%'
+UNION ALL
+SELECT OrderID, CustomerName, 'Keyboard' AS Product
+FROM ProductDetail
+WHERE Products LIKE '%Keyboard%'
+UNION ALL
+SELECT OrderID, CustomerName, 'Phone' AS Product
+FROM ProductDetail
+WHERE Products LIKE '%Phone%';
 
 --- 
 
@@ -58,6 +77,30 @@ Task:
 - In the table above, the **CustomerName** column depends on **OrderID** (a partial dependency), which violates **2NF**. 
 
 - Write an SQL query to transform this table into **2NF** by removing partial dependencies. Ensure that each non-key column fully depends on the entire primary key.
+
+STEP 1: Create a Customers table (OrderID → CustomerName)
+CREATE TABLE Customers (
+    OrderID INT PRIMARY KEY,
+    CustomerName VARCHAR(100)
+);
+
+INSERT INTO Customers (OrderID, CustomerName)
+SELECT DISTINCT OrderID, CustomerName
+FROM OrderDetails;
+
+STEP 2: Create a NewOrderDetails table (OrderID + Product → Quantity)
+
+CREATE TABLE NewOrderDetails (
+    OrderID INT,
+    Product VARCHAR(100),
+    Quantity INT,
+    PRIMARY KEY (OrderID, Product)
+);
+
+INSERT INTO NewOrderDetails (OrderID, Product, Quantity)
+SELECT OrderID, Product, Quantity
+FROM OrderDetails;
+
 
 ---
 Good luck 🚀
